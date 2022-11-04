@@ -2,14 +2,18 @@ import { Button } from "@chakra-ui/button";
 import { Box, Divider, Flex, Heading, HStack, SimpleGrid, VStack } from "@chakra-ui/layout";
 import { yupResolver } from '@hookform/resolvers/yup';
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useMutation } from "react-query";
 import * as yup from 'yup';
 
 import Input from "../../components/Form/Input";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
+import { api } from "../../services/api";
+import { queryClient } from "../../services/queryClient";
 
-type createUserFormData = {
+type CreateUserFormData = {
   email: string;
   name: string;
   password:  string;
@@ -24,11 +28,27 @@ const createUserFormSchema = yup.object().shape({
 })
 
 const UserCreate = () => {
-  const { register, handleSubmit, formState } = useForm<createUserFormData>({
+  const router = useRouter();
+  const createUser = useMutation(async (user: CreateUserFormData) => {
+    const response = await api.post('users', {
+      user: {
+        ...user,
+        created_at: new Date()
+      }
+    });
+    return response.data.user;
+  }, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries('users');
+    }
+  });
+  const { register, handleSubmit, formState } = useForm<CreateUserFormData>({
     resolver: yupResolver(createUserFormSchema)
   });
-  const handleCreateUser: SubmitHandler<createUserFormData> = (data, event) => {
+  const handleCreateUser: SubmitHandler<CreateUserFormData> = async (data, event) => {
     event?.preventDefault();
+    await createUser.mutateAsync(data);
+    router.push('/users');
   }
 
   return (

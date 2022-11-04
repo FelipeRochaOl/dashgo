@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
 import {
+  ActiveModelSerializer,
   createServer,
   Factory,
-  JSONAPISerializer,
   Model,
   Response,
 } from "miragejs";
@@ -40,7 +40,7 @@ export function makeServer() {
       server.createList("user", 100);
     },
     serializers: {
-      application: JSONAPISerializer,
+      application: ActiveModelSerializer,
     },
     routes() {
       this.namespace = "api";
