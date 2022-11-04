@@ -15,7 +15,6 @@ const options: ApexOptions = {
       enabled: false,
     },
     foreColor: theme.colors.gray[500],
-    width: 500
   },
   grid: {
     show: false
