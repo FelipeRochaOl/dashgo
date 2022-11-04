@@ -6,7 +6,7 @@ import NotificationsNav from './NotificationsNav';
 import Profile from './Profile';
 import SearchBox from './SearchBox';
 
-export function Header() {
+const Header = () => {
   const { onOpen } = useSideBarDrawer()
   const isWideVersion = useBreakpointValue({ base: false, lg: true})
   return (
@@ -39,3 +39,4 @@ export function Header() {
     </Flex>
   )
 }
+export default Header;
