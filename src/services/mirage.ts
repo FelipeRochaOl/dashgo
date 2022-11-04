@@ -49,7 +49,7 @@ export function makeServer() {
     },
     routes() {
       this.namespace = "api";
-      // this.timing = 750; // test loading
+      this.timing = 750; // test loading
 
       this.get("/users", function (schema, request) {
         try {
