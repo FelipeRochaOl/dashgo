@@ -37,7 +37,15 @@ const Pagination = ({
       justify="space-between"
       align="center"
     >
-      <PaginationTotal begin={1} end={4} total={100}/>
+      { currentPag === 1 ? (
+        <PaginationTotal begin={1} end={registersPerPage} total={totalCountOfRegisters}/>
+      ) : (
+        <PaginationTotal 
+          begin={currentPag * registersPerPage - (registersPerPage - 1)}
+          end={totalCountOfRegisters > registersPerPage ? currentPag * registersPerPage : totalCountOfRegisters}
+          total={totalCountOfRegisters}
+        />
+      )}
       <HStack spacing={2}>
         {currentPag > (1 + siblingsCount) && (
           <>

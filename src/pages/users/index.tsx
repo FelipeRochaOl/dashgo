@@ -10,19 +10,28 @@ import Pagination from "../../components/Pagination";
 import Sidebar from "../../components/Sidebar";
 import { getUsers, GetUsersResponse, useUsers } from "../../hooks/useUsers";
 import { api } from "../../services/api";
+import { fakeResponse } from "../../services/mirage";
 import { queryClient } from "../../services/queryClient";
 
-export default function UserList({ users }: GetUsersResponse) {
+export default function UserList({ users, totalCount }: GetUsersResponse) {
   const [page, setPage] = useState(1);
   const { data, isLoading, isFetching, refetch, error } = useUsers(page, {
-    initialData: users // react-query with SSR
+    initialData: { users, totalCount }, // react-query with SSR
   });
   const isWideVersion = useBreakpointValue({ base: false, lg: true });
 
   async function handlePrefetchUser(userId: string) {
     await queryClient.prefetchQuery(['user', userId], async () => {
-      const response = await api.get(`users/${userId}`)
-      return response.data;
+      try {
+        const response = await api.get(`users/${userId}`);
+        if (response.statusText !== 'OK') {
+          throw new Error()
+        }
+        return response.data;
+      } catch (error) {
+        console.error(error);
+        return fakeResponse
+      }
     }, {
       staleTime: 1000 * 60 * 10 // 10 minutes
     })
@@ -99,7 +108,7 @@ export default function UserList({ users }: GetUsersResponse) {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data?.users.map(user => {
+                  {data && data.users && data.users.map(user => {
                     return (
                       <Tr key={user.id}>
                         <Td px={[4, 4, 6]}>

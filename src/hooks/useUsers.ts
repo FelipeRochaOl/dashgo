@@ -1,5 +1,6 @@
 import { useQuery, UseQueryOptions, UseQueryResult } from "react-query";
 import { api } from "../services/api";
+import { fakeResponse } from "../services/mirage";
 
 interface User {
   id: string;
@@ -9,9 +10,7 @@ interface User {
 }
 
 interface UserData {
-  users: {
-    models: User[];
-  };
+  users: User[];
 }
 
 export type GetUsersResponse = {
@@ -20,37 +19,38 @@ export type GetUsersResponse = {
 };
 
 export async function getUsers(page: number): Promise<GetUsersResponse> {
-  const response = await api.get("/users", {
-    params: {
-      page,
-    },
-  });
-  const totalCount = Number(response.headers["x-total-count"]);
-  const data: UserData = response.data;
-  const users = data.users.models.map((user) => {
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      createdAt: new Date(user.createdAt).toLocaleDateString("pt-BR", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      }),
-    };
-  });
-  return { users, totalCount };
+  try {
+    const response = await api.get("/users", {
+      params: {
+        page,
+      },
+    });
+    if (response.statusText !== "OK") {
+      throw new Error();
+    }
+    const totalCount = Number(response.headers["x-total-count"]);
+    const data: UserData = response.data;
+    const users = data.users.map((user) => {
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: new Date(user.createdAt).toLocaleDateString("pt-BR", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        }),
+      };
+    });
+    return { users, totalCount };
+  } catch (error) {
+    console.error(error);
+    return fakeResponse;
+  }
 }
 
-export function useUsers(
-  page: number,
-  options?: Omit<
-    UseQueryOptions<unknown, unknown, unknown, (string | number)[]>,
-    "queryKey" | "queryFn"
-  >
-) {
-  return useQuery(["users", page], () => getUsers(page), {
-    staleTime: 1000 * 60 * 10, // 10 minutes
+export function useUsers(page: number, options?: UseQueryOptions) {
+  return useQuery(["users", page], async () => await getUsers(page), {
     ...options,
   }) as UseQueryResult<GetUsersResponse, unknown>;
 }

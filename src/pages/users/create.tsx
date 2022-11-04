@@ -30,13 +30,19 @@ const createUserFormSchema = yup.object().shape({
 const UserCreate = () => {
   const router = useRouter();
   const createUser = useMutation(async (user: CreateUserFormData) => {
-    const response = await api.post('users', {
-      user: {
-        ...user,
-        created_at: new Date()
+    try {
+      const response = await api.post('users', {
+        user: {
+          ...user,
+          created_at: new Date()
+        }
+      });
+      if (response.statusText !== 'OK') {
+        throw new Error()
       }
-    });
-    return response.data.user;
+    } catch (error) {
+      console.error(error);
+    }
   }, {
     onSuccess: async () => {
       await queryClient.invalidateQueries('users');
