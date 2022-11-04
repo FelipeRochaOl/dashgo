@@ -1,3 +1,40 @@
+# Project Dashgo Ignews
+
+Project development using NextJS to the application, react-query to cache in front-end, yup to validation forms, 
+react-hook-form to controled of the forms, apexchart to charts in page dashboard, miragejs to fake data api, chakra
+to styles components and pages with responsive mode.
+
+[https://dashgo.felipe-rocha.com](https://dashgo.felipe-rocha.com)
+
+[![Watch the video](https://cdn.loom.com/sessions/thumbnails/a7552f09f443438daa98571cb706130d-with-play.gif)](https://www.loom.com/share/a7552f09f443438daa98571cb706130d)
+
+
+## Technologies used
+<div style="display:inline-block">
+<img align="center" alt="Typescript" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg">
+<img align="center" alt="React" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg">
+<img align="center" alt="NextJS" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nextjs/nextjs-original.svg">
+<img align="center" alt="Eslint" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/eslint/eslint-original.svg">
+<img align="center" alt="Yarn" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/yarn/yarn-original.svg">
+<img align="center" alt="Vscode" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/vscode/vscode-original.svg">
+</div>
+
+---
+
+## Important:
+
+To run in development environment:
+```zsh
+yarn dev
+```
+
+To run in production environment:
+```zsh
+yarn build
+```
+
+---
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
