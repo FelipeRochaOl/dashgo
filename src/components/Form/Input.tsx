@@ -30,4 +30,5 @@ const InputBase: ForwardRefRenderFunction<HTMLInputElement, InputProps> =
     </FormControl>
   )
 }
-export const Input = forwardRef(InputBase)
+const Input = forwardRef(InputBase)
+export default Input;
