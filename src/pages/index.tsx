@@ -2,7 +2,8 @@ import { Button, Flex, Stack } from "@chakra-ui/react";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { Input } from "../components/Form/Input";
+
+import Input from "../components/Form/Input";
 
 type SignInFormData = {
   email: string;
@@ -20,7 +21,6 @@ export default function SignIn() {
   });
   const handleSignIn: SubmitHandler<SignInFormData> = (data, event) => {
     event?.preventDefault();
-    console.log(data);
   }
   return (
     <Flex 
