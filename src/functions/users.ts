@@ -6,7 +6,7 @@ type User = {
   id: string;
   name: string;
   email: string;
-  created_at: Date;
+  createdAt: Date;
 };
 
 const storage: User[] = [];
@@ -19,7 +19,7 @@ const getAllUsers = async (event: Event, total = 100): Promise<User[]> => {
       id: String(i),
       name: faker.name.fullName(),
       email: faker.internet.email(),
-      created_at: faker.date.recent(10),
+      createdAt: faker.date.recent(10),
     });
     i++;
   } while (i < total);
