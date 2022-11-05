@@ -25,8 +25,6 @@ export async function getUsers(page: number): Promise<GetUsersResponse> {
         page,
       },
     });
-    console.log("getUsers");
-    console.log(response);
     const totalCount = Number(response.headers["x-total-count"]);
     const data: UserData = response.data;
     const users = data.users.map((user) => {
