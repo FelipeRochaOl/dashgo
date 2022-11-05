@@ -66,8 +66,8 @@ const handler: Handler = async (event, context) => {
     }
     return {
       statusCode: 200,
-      headers: { "x-total-count": users.length },
-      body: JSON.stringify({ users, totalCount: users.length }),
+      headers: { "x-total-count": 100 },
+      body: JSON.stringify({ users, totalCount: 100 }),
     };
   } catch {
     return {
