@@ -50,7 +50,7 @@ export async function getUsers(page: number): Promise<GetUsersResponse> {
 }
 
 export function useUsers(page: number, options?: UseQueryOptions) {
-  return useQuery(["users", page], async () => await getUsers(page), {
+  return useQuery(["users", page], () => getUsers(page), {
     ...options,
   }) as UseQueryResult<GetUsersResponse, unknown>;
 }
