@@ -31,15 +31,12 @@ const UserCreate = () => {
   const router = useRouter();
   const createUser = useMutation(async (user: CreateUserFormData) => {
     try {
-      const response = await api.post('users', {
+      await api.post('users', {
         user: {
           ...user,
           created_at: new Date()
         }
       });
-      if (response.statusText !== 'OK') {
-        throw new Error()
-      }
     } catch (error) {
       console.error(error);
     }

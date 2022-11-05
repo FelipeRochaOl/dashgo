@@ -26,9 +26,6 @@ export default function UserList({ users, totalCount }: GetUsersResponse) {
         const response = await api.get(`users/${userId}`);
         console.log('page users');
         console.log(response);
-        if (response.statusText !== 'OK') {
-          throw new Error()
-        }
         return response.data;
       } catch (error) {
         console.error(error);
