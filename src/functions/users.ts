@@ -55,7 +55,7 @@ const handler: Handler = async (event, context) => {
   try {
     let users: User[] = [];
     if (event.httpMethod === "GET") {
-      users = await getAllUsers(event);
+      users = await getAllUsers(event, 200);
       const selectedUser = await selectUser(event);
       if (selectedUser) {
         return {
