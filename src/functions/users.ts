@@ -53,12 +53,18 @@ const addUsers = async (data: string): Promise<User[]> => {
   return storage;
 };
 
+const initStorage = async (event: Event, totalCount): Promise<void> => {
+  if (!storage.length) {
+    await getAllUsers(event, totalCount);
+  }
+};
+
 const handler: Handler = async (event, context) => {
   try {
     let users: User[] = [];
     const totalCount = 200;
+    await initStorage(event, totalCount);
     if (event.httpMethod === "GET") {
-      users = await getAllUsers(event, totalCount);
       const selectedUser = await selectUser(event);
       if (selectedUser) {
         return {
