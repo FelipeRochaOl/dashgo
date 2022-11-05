@@ -28,7 +28,7 @@ const getAllUsers = async (): Promise<User[]> => {
 const selectUser = async (event: Event): Promise<User[]> => {
   const urlParts = event.path.split("/");
   const id = urlParts[urlParts.length - 1];
-  if (id) {
+  if (!Number.isNaN(id)) {
     const user = storage.find((user) => user.id === id);
     return !user ? [] : [user];
   }
