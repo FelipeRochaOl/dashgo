@@ -28,7 +28,11 @@ const getAllUsers = async (event: Event, total = 100): Promise<User[]> => {
   } while (i < total);
   const pageStart = (Number(page) - 1) * Number(per_page);
   const pageEnd = pageStart + Number(per_page);
-  return storage.slice(pageStart, pageEnd);
+  return storage
+    .slice(pageStart, pageEnd)
+    .sort(
+      (userA, userB) => userB.createdAt.valueOf() - userA.createdAt.valueOf()
+    );
 };
 
 const selectUser = async (event: Event): Promise<User> => {
@@ -41,20 +45,18 @@ const selectUser = async (event: Event): Promise<User> => {
 };
 
 const addUsers = async (data: string): Promise<User[]> => {
-  console.log(data);
-  const dataJson: Omit<User, "id" | "created_at"> = JSON.parse(data);
-  console.log(dataJson);
+  const dataJson: User = JSON.parse(data);
   const user = {
     id: String(storage.length + 1),
     createdAt: new Date(),
-    ...dataJson,
+    email: dataJson.email,
+    name: dataJson.name,
   };
   storage.push(user);
   return storage;
 };
 
 const handler: Handler = async (event, context) => {
-  console.log(event, context);
   try {
     let users: User[] = [];
     if (event.httpMethod === "GET") {
