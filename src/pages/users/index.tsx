@@ -24,6 +24,8 @@ export default function UserList({ users, totalCount }: GetUsersResponse) {
     await queryClient.prefetchQuery(['user', userId], async () => {
       try {
         const response = await api.get(`users/${userId}`);
+        console.log('page users');
+        console.log(response);
         if (response.statusText !== 'OK') {
           throw new Error()
         }

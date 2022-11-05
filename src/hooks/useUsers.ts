@@ -25,6 +25,8 @@ export async function getUsers(page: number): Promise<GetUsersResponse> {
         page,
       },
     });
+    console.log("getUsers");
+    console.log(response);
     if (response.statusText !== "OK") {
       throw new Error();
     }
