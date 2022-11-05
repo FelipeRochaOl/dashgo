@@ -11,7 +11,8 @@ type User = {
 
 const storage: User[] = [];
 
-const getAllUsers = async (): Promise<User[]> => {
+const getAllUsers = async (event: Event): Promise<User[]> => {
+  const { page = 1, per_page = 10 } = event.queryStringParameters;
   let i = 0;
   do {
     storage.push({
@@ -22,7 +23,9 @@ const getAllUsers = async (): Promise<User[]> => {
     });
     i++;
   } while (i < 100);
-  return storage;
+  const pageStart = (Number(page) - 1) * Number(per_page);
+  const pageEnd = pageStart + Number(per_page);
+  return storage.slice(pageStart, pageEnd);
 };
 
 const selectUser = async (event: Event): Promise<User> => {
@@ -49,7 +52,7 @@ const handler: Handler = async (event, context) => {
     console.log(event, context);
     let users: User[] = [];
     if (event.httpMethod === "GET") {
-      users = await getAllUsers();
+      users = await getAllUsers(event);
       const selectedUser = await selectUser(event);
       if (selectedUser) {
         return {
@@ -63,11 +66,13 @@ const handler: Handler = async (event, context) => {
     }
     return {
       statusCode: 200,
+      headers: { "x-total-count": users.length },
       body: JSON.stringify({ users, totalCount: users.length }),
     };
   } catch {
     return {
       statusCode: 500,
+      headers: { "x-total-count": 0 },
       body: JSON.stringify({ users: [], totalCount: 0 }),
     };
   }
