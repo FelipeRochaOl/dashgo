@@ -12,9 +12,6 @@ type User = {
 let storage: User[] = [];
 
 const getAllUsers = async (event: Event, total = 100): Promise<User[]> => {
-  if (storage.length > total) {
-    storage = [];
-  }
   const { page = 1, per_page = 10 } = event.queryStringParameters;
   let i = 0;
   do {
@@ -71,6 +68,9 @@ const handler: Handler = async (event, context) => {
     }
     if (event.httpMethod === "POST") {
       users = await addUsers(event.body);
+    }
+    if (storage.length >= 300) {
+      storage = [];
     }
     return {
       statusCode: 200,

@@ -51,7 +51,7 @@ const UserCreate = () => {
   const handleCreateUser: SubmitHandler<CreateUserFormData> = async (data, event) => {
     event?.preventDefault();
     await createUser.mutateAsync(data);
-    // router.push('/users');
+    router.push('/users');
   }
 
   return (
