@@ -9,9 +9,12 @@ type User = {
   createdAt: Date;
 };
 
-const storage: User[] = [];
+let storage: User[] = [];
 
 const getAllUsers = async (event: Event, total = 100): Promise<User[]> => {
+  if (storage.length > total) {
+    storage = [];
+  }
   const { page = 1, per_page = 10 } = event.queryStringParameters;
   let i = 0;
   do {
