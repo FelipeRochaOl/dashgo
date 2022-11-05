@@ -1,0 +1,8 @@
+[functions]
+  directory = "src/functions"
+[production]
+  port = 3333
+[dev]
+  command = "yarn start"
+  port = 3333
+  publish = "dist"
