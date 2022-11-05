@@ -31,7 +31,6 @@ const UserCreate = () => {
   const router = useRouter();
   const createUser = useMutation(async (user: CreateUserFormData) => {
     try {
-      console.log(user);
       await api.post('users', {
         user: {
           ...user,
@@ -52,7 +51,6 @@ const UserCreate = () => {
   const handleCreateUser: SubmitHandler<CreateUserFormData> = async (data, event) => {
     event?.preventDefault();
     await createUser.mutateAsync(data);
-    console.log('aqui');
     // router.push('/users');
   }
 

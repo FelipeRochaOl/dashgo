@@ -38,9 +38,12 @@ const selectUser = async (event: Event): Promise<User> => {
 };
 
 const addUsers = async (data: string): Promise<User[]> => {
-  const dataJson: Omit<User, "id"> = JSON.parse(data);
+  console.log(data);
+  const dataJson: Omit<User, "id" | "created_at"> = JSON.parse(data);
+  console.log(dataJson);
   const user = {
     id: String(storage.length + 1),
+    createdAt: new Date(),
     ...dataJson,
   };
   storage.push(user);
@@ -48,8 +51,8 @@ const addUsers = async (data: string): Promise<User[]> => {
 };
 
 const handler: Handler = async (event, context) => {
+  console.log(event, context);
   try {
-    console.log(event, context);
     let users: User[] = [];
     if (event.httpMethod === "GET") {
       users = await getAllUsers(event);
@@ -69,7 +72,8 @@ const handler: Handler = async (event, context) => {
       headers: { "x-total-count": 100 },
       body: JSON.stringify({ users, totalCount: 100 }),
     };
-  } catch {
+  } catch (error) {
+    console.error(error);
     return {
       statusCode: 500,
       headers: { "x-total-count": 0 },
