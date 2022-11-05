@@ -6,7 +6,7 @@ to styles components and pages with responsive mode.
 
 [https://dashgo.felipe-rocha.com](https://dashgo.felipe-rocha.com)
 
-[![Watch the video](https://cdn.loom.com/sessions/thumbnails/a7552f09f443438daa98571cb706130d-with-play.gif)](https://www.loom.com/share/a7552f09f443438daa98571cb706130d)
+[![Watch the video](https://cdn.loom.com/sessions/thumbnails/e9f150d036214027bde6a4162733b40d-with-play.gif)](https://www.loom.com/share/e9f150d036214027bde6a4162733b40d)
 
 
 ## Technologies used
