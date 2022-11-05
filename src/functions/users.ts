@@ -60,12 +60,15 @@ const initStorage = async (event: Event, totalCount: number): Promise<void> => {
 };
 
 const handler: Handler = async (event, context) => {
+  console.log("aqui");
   try {
     let users: User[] = [];
     const totalCount = 200;
     await initStorage(event, totalCount);
     if (event.httpMethod === "GET") {
+      console.log("entrou");
       const selectedUser = await selectUser(event);
+      console.log(selectedUser);
       if (selectedUser) {
         return {
           statusCode: 200,
@@ -75,9 +78,6 @@ const handler: Handler = async (event, context) => {
     }
     if (event.httpMethod === "POST") {
       users = await addUsers(event.body);
-    }
-    if (storage.length >= 300) {
-      storage = [];
     }
     console.log(storage);
     return {
