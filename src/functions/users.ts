@@ -25,14 +25,13 @@ const getAllUsers = async (): Promise<User[]> => {
   return storage;
 };
 
-const selectUser = async (event: Event): Promise<User[]> => {
+const selectUser = async (event: Event): Promise<User> => {
   const urlParts = event.path.split("/");
   const id = urlParts[urlParts.length - 1];
   if (!Number.isNaN(id)) {
-    const user = storage.find((user) => user.id === id);
-    return !user ? [] : [user];
+    return storage.find((user) => user.id === id);
   }
-  return getAllUsers();
+  return undefined;
 };
 
 const addUsers = async (data: string): Promise<User[]> => {
@@ -46,18 +45,32 @@ const addUsers = async (data: string): Promise<User[]> => {
 };
 
 const handler: Handler = async (event, context) => {
-  console.log(event, context);
-  let users: User[] = [];
-  if (event.httpMethod === "GET") {
-    users = await selectUser(event);
+  try {
+    console.log(event, context);
+    let users: User[] = [];
+    if (event.httpMethod === "GET") {
+      users = await getAllUsers();
+      const selectedUser = await selectUser(event);
+      if (selectedUser) {
+        return {
+          statusCode: 200,
+          body: JSON.stringify({ ...selectedUser }),
+        };
+      }
+    }
+    if (event.httpMethod === "POST") {
+      users = await addUsers(event.body);
+    }
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ users, totalCount: users.length }),
+    };
+  } catch {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ users: [], totalCount: 0 }),
+    };
   }
-  if (event.httpMethod === "POST") {
-    users = await addUsers(event.body);
-  }
-  return {
-    statusCode: 200,
-    body: JSON.stringify({ users, totalCount: users.length }),
-  };
 };
 
 export { handler };
