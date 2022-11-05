@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { Handler } from "@netlify/functions";
+import { Event } from "@netlify/functions/dist/function/event";
 
 type User = {
   id: string;
@@ -24,9 +25,23 @@ const getAllUsers = async (): Promise<User[]> => {
   return storage;
 };
 
+const selectUser = async (event: Event): Promise<User[]> => {
+  const urlParts = event.path.split("/");
+  const id = urlParts[urlParts.length - 1];
+  if (id) {
+    const user = storage.find((user) => user.id === id);
+    return !user ? [] : [user];
+  }
+  return getAllUsers();
+};
+
 const addUsers = async (data: string): Promise<User[]> => {
-  const dataJson = JSON.parse(data);
-  storage.push(dataJson);
+  const dataJson: Omit<User, "id"> = JSON.parse(data);
+  const user = {
+    id: String(storage.length + 1),
+    ...dataJson,
+  };
+  storage.push(user);
   return storage;
 };
 
@@ -34,7 +49,7 @@ const handler: Handler = async (event, context) => {
   console.log(event, context);
   let users: User[] = [];
   if (event.httpMethod === "GET") {
-    users = await getAllUsers();
+    users = await selectUser(event);
   }
   if (event.httpMethod === "POST") {
     users = await addUsers(event.body);
