@@ -56,8 +56,9 @@ const addUsers = async (data: string): Promise<User[]> => {
 const handler: Handler = async (event, context) => {
   try {
     let users: User[] = [];
+    const totalCount = 200;
     if (event.httpMethod === "GET") {
-      users = await getAllUsers(event, 200);
+      users = await getAllUsers(event, totalCount);
       const selectedUser = await selectUser(event);
       if (selectedUser) {
         return {
@@ -72,10 +73,11 @@ const handler: Handler = async (event, context) => {
     if (storage.length >= 300) {
       storage = [];
     }
+    console.log(storage);
     return {
       statusCode: 200,
-      headers: { "x-total-count": 100 },
-      body: JSON.stringify({ users, totalCount: 100 }),
+      headers: { "x-total-count": totalCount },
+      body: JSON.stringify({ users, totalCount }),
     };
   } catch (error) {
     console.error(error);
