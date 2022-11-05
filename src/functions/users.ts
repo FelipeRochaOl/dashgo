@@ -53,7 +53,7 @@ const addUsers = async (data: string): Promise<User[]> => {
   return storage;
 };
 
-const initStorage = async (event: Event, totalCount): Promise<void> => {
+const initStorage = async (event: Event, totalCount: number): Promise<void> => {
   if (!storage.length) {
     await getAllUsers(event, totalCount);
   }
