@@ -11,18 +11,24 @@ type User = {
 
 let storage: User[] = [];
 
+const initStorage = (total: number): void => {
+  if (!storage.length) {
+    let i = 0;
+    do {
+      storage.push({
+        id: String(i),
+        name: faker.name.fullName(),
+        email: faker.internet.email(),
+        createdAt: faker.date.recent(10),
+      });
+      i++;
+    } while (i < total);
+  }
+};
+
 const getAllUsers = async (event: Event, total = 100): Promise<User[]> => {
+  initStorage(total);
   const { page = 1, per_page = 10 } = event.queryStringParameters;
-  let i = 0;
-  do {
-    storage.push({
-      id: String(i),
-      name: faker.name.fullName(),
-      email: faker.internet.email(),
-      createdAt: faker.date.recent(10),
-    });
-    i++;
-  } while (i < total);
   const pageStart = (Number(page) - 1) * Number(per_page);
   const pageEnd = pageStart + Number(per_page);
   return storage
@@ -53,18 +59,12 @@ const addUsers = async (data: string): Promise<User[]> => {
   return storage;
 };
 
-const initStorage = async (event: Event, totalCount: number): Promise<void> => {
-  if (!storage.length) {
-    await getAllUsers(event, totalCount);
-  }
-};
-
 const handler: Handler = async (event, context) => {
   console.log("aqui");
   try {
-    let users: User[] = [];
     const totalCount = 200;
-    await initStorage(event, totalCount);
+    let users: User[] = await getAllUsers(event, totalCount);
+
     if (event.httpMethod === "GET") {
       console.log("entrou");
       const selectedUser = await selectUser(event);
