@@ -11,7 +11,7 @@ type User = {
 
 const storage: User[] = [];
 
-const getAllUsers = async (event: Event): Promise<User[]> => {
+const getAllUsers = async (event: Event, total = 100): Promise<User[]> => {
   const { page = 1, per_page = 10 } = event.queryStringParameters;
   let i = 0;
   do {
@@ -22,7 +22,7 @@ const getAllUsers = async (event: Event): Promise<User[]> => {
       created_at: faker.date.recent(10),
     });
     i++;
-  } while (i < 100);
+  } while (i < total);
   const pageStart = (Number(page) - 1) * Number(per_page);
   const pageEnd = pageStart + Number(per_page);
   return storage.slice(pageStart, pageEnd);
